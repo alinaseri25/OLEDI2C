@@ -51,8 +51,8 @@ class SSD1306_OLED
 		void Fill(SSD1306_COLOR color);
 		void UpdateScreen(void);
 		void DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
-		char WriteChar(uint8_t ch, FontDef Font, SSD1306_COLOR color);
-		char WriteString(uint8_t* str, FontDef Font, SSD1306_COLOR color);
+		char WriteChar(uint8_t ch, FontDef Font, SSD1306_COLOR color,bool wordWrap = false);
+		char WriteString(uint8_t* str, FontDef Font, SSD1306_COLOR color,bool wordWrap = false);
 		void SetCursor(uint8_t x, uint8_t y);
 		void DrawBitmap(uint8_t *_Buffer);
 		void InvertDisplay(bool _Command);

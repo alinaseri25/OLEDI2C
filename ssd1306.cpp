@@ -44,7 +44,7 @@ void SSD1306_OLED::DrawBitmap(uint8_t *_Buffer)
 //
 //	Initialize the oled screen
 //
-uint8_t SSD1306_OLED::Init(void)
+uint8_t SSD1306_OLED::Init()
 {	
 	// Wait for the screen to boot
 	
@@ -161,21 +161,22 @@ void SSD1306_OLED::DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color)
 //	Font 	=> Font waarmee we gaan schrijven
 //	color 	=> Black or White
 //
-char SSD1306_OLED::WriteChar(uint8_t ch, FontDef Font, SSD1306_COLOR color)
+char SSD1306_OLED::WriteChar(uint8_t ch, FontDef Font, SSD1306_COLOR color,bool wordWrap)
 {
 	uint32_t i, b, j;
 	
-	// Check remaining space on current line
-	if(SSD1306_WIDTH <= (SSD1306.CurrentX + Font.FontWidth))
+	if(wordWrap)// Check remaining space on current line
 	{
-		SSD1306.CurrentY += Font.FontHeight;
-		SSD1306.CurrentX = 0;
-	}
-	else if(SSD1306_WIDTH <= (SSD1306.CurrentX + Font.FontWidth) ||
-		SSD1306_HEIGHT <= (SSD1306.CurrentY + Font.FontHeight))
-	{
-		// Not enough space on current line
-		return 0;
+		if(SSD1306_WIDTH <= (SSD1306.CurrentX + Font.FontWidth) &&
+			SSD1306_HEIGHT <= (SSD1306.CurrentY + Font.FontHeight))
+		{
+			SetCursor(0,0);
+		}
+		else if(SSD1306_WIDTH <= (SSD1306.CurrentX + Font.FontWidth))
+		{
+			SSD1306.CurrentY += Font.FontHeight;
+			SSD1306.CurrentX = 0;
+		}
 	}
 	
 	if(ch == '\r')
@@ -215,12 +216,12 @@ char SSD1306_OLED::WriteChar(uint8_t ch, FontDef Font, SSD1306_COLOR color)
 //
 //  Write full string to screenbuffer
 //
-char SSD1306_OLED::WriteString(uint8_t* str, FontDef Font, SSD1306_COLOR color)
+char SSD1306_OLED::WriteString(uint8_t* str, FontDef Font, SSD1306_COLOR color,bool wordWrap)
 {
 	// Write until null-byte
 	while (*str) 
 	{
-		if (WriteChar(*str, Font, color) != *str)
+		if (WriteChar(*str, Font, color,wordWrap) != *str)
 		{
 			// Char could not be written
 			return *str;
