@@ -3,6 +3,7 @@
 
 SSD1306_OLED::SSD1306_OLED(I2C_HandleTypeDef *_hi2c)
 {
+	SSD1306_Buffer_Size = SSD1306_WIDTH * SSD1306_HEIGHT / 8;
 	hi2c = _hi2c;
 }
 
@@ -101,7 +102,7 @@ void SSD1306_OLED::Fill(SSD1306_COLOR color)
 	/* Set memory */
 	uint32_t i;
 
-	for(i = 0; i < sizeof(SSD1306_Buffer); i++)
+	for(i = 0; i < SSD1306_Buffer_Size; i++)
 	{
 		//SSD1306_Buffer[i] = (color == Black) ? 0x00 : 0xFF;
 		WriteData((color == Black) ? 0x00 : 0xFF);

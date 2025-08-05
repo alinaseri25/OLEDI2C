@@ -68,6 +68,7 @@ class SSD1306_OLED
 	
 		I2C_HandleTypeDef *hi2c;
 		// Screenbuffer
+		uint32_t SSD1306_Buffer_Size;
 		uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 
 		// Screen object
